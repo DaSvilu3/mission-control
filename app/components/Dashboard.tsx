@@ -1,60 +1,61 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { fetchDashboardData } from '../data/realData';
-import { DashboardData } from '../types';
+import { DashboardData, Agent } from '../types';
+import Sidebar from './Sidebar';
+import DashboardHeader from './DashboardHeader';
+import SystemStatsBar from './SystemStatsBar';
 import AgentCard from './AgentCard';
 import KanbanBoard from './KanbanBoard';
-import DashboardHeader from './DashboardHeader';
+import CronPanel from './CronPanel';
+import ActivityTimeline from './ActivityTimeline';
+import ProjectCards from './ProjectCards';
+import SessionModal from './SessionModal';
+import { motion } from 'framer-motion';
+
+type NavItem = 'dashboard' | 'sessions' | 'cron' | 'projects' | 'settings';
 
 export default function Dashboard() {
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeNav, setActiveNav] = useState<NavItem>('dashboard');
+  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
 
-  const loadDashboardData = async () => {
-    setLoading(true);
+  const loadData = useCallback(async () => {
     try {
-      const data = await fetchDashboardData();
-      setDashboardData(data);
-    } catch (error) {
-      console.error('Failed to load dashboard data:', error);
+      const d = await fetchDashboardData();
+      setData(d);
+    } catch (e) {
+      console.error('Failed to load:', e);
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    loadDashboardData();
-    
-    // Auto-refresh every 30 seconds
-    const interval = setInterval(loadDashboardData, 30000);
-    return () => clearInterval(interval);
   }, []);
 
-  const handleRefresh = () => {
-    loadDashboardData();
-  };
+  useEffect(() => {
+    loadData();
+    const interval = setInterval(loadData, 30000);
+    return () => clearInterval(interval);
+  }, [loadData]);
 
-  if (loading && !dashboardData) {
+  if (loading && !data) {
     return (
       <div className="min-h-screen bg-[#1a1a2e] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading Mission Control...</p>
+          <div className="w-14 h-14 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-500 text-sm">Loading Mission Control...</p>
         </div>
       </div>
     );
   }
 
-  if (!dashboardData) {
+  if (!data) {
     return (
       <div className="min-h-screen bg-[#1a1a2e] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-400 mb-4">Failed to load dashboard data</p>
-          <button 
-            onClick={handleRefresh}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md"
-          >
+          <p className="text-red-400 mb-4">Failed to load data</p>
+          <button onClick={loadData} className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm">
             Retry
           </button>
         </div>
@@ -62,69 +63,112 @@ export default function Dashboard() {
     );
   }
 
-  const { agents, tasks, lastRefresh } = dashboardData;
+  const renderContent = () => {
+    switch (activeNav) {
+      case 'sessions':
+        return (
+          <div>
+            <h2 className="text-xl font-semibold text-white mb-4">All Sessions</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {data.agents.map((agent) => (
+                <AgentCard key={agent.id} agent={agent} onClick={setSelectedAgent} />
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'cron':
+        return <CronPanel jobs={data.cronJobs} />;
+
+      case 'projects':
+        return (
+          <div className="space-y-8">
+            <ProjectCards projects={data.projects} />
+            <KanbanBoard tasks={data.tasks} />
+          </div>
+        );
+
+      case 'settings':
+        return (
+          <div className="bg-gray-800/80 border border-gray-700 rounded-xl p-6 max-w-lg">
+            <h2 className="text-xl font-semibold text-white mb-4">Settings</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm text-gray-400 block mb-1">Auto-refresh interval</label>
+                <p className="text-gray-300 text-sm">30 seconds</p>
+              </div>
+              <div>
+                <label className="text-sm text-gray-400 block mb-1">Gateway endpoint</label>
+                <p className="text-gray-300 text-sm font-mono">http://localhost:18789</p>
+              </div>
+              <div>
+                <label className="text-sm text-gray-400 block mb-1">Token status</label>
+                <p className="text-gray-300 text-sm">{data.stats.online ? '✅ Configured & connected' : '⚠️ Not connected (using fallback data)'}</p>
+              </div>
+            </div>
+          </div>
+        );
+
+      default: // dashboard
+        return (
+          <div className="space-y-6">
+            <SystemStatsBar stats={data.stats} />
+
+            {/* Agents */}
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                  🤖 Active Sessions
+                </h2>
+                <span className="text-xs text-gray-500">
+                  {data.agents.filter((a) => a.status === 'active').length} active / {data.agents.length} total
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {data.agents.map((agent) => (
+                  <AgentCard key={agent.id} agent={agent} onClick={setSelectedAgent} />
+                ))}
+              </div>
+            </section>
+
+            {/* Two columns: Timeline + Cron/Projects */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-1">
+                <ActivityTimeline events={data.timeline} />
+              </div>
+              <div className="lg:col-span-2 space-y-6">
+                <CronPanel jobs={data.cronJobs} />
+                <ProjectCards projects={data.projects} />
+              </div>
+            </div>
+
+            {/* Kanban */}
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                  📋 Project Tasks
+                </h2>
+                <span className="text-xs text-gray-500">{data.tasks.length} tasks</span>
+              </div>
+              <KanbanBoard tasks={data.tasks} />
+            </section>
+          </div>
+        );
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e] p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <DashboardHeader 
-          lastRefresh={lastRefresh}
-          onRefresh={handleRefresh}
-        />
-
-        {/* Agents Overview */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-white flex items-center space-x-2">
-              <span>🤖</span>
-              <span>Active Sessions</span>
-            </h2>
-            <div className="text-gray-400 text-sm">
-              {agents.filter(a => a.status === 'active').length} active • {agents.length} total
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {agents.map(agent => (
-              <AgentCard key={agent.id} agent={agent} />
-            ))}
-          </div>
+    <div className="flex min-h-screen bg-[#1a1a2e]">
+      <Sidebar active={activeNav} onNavigate={setActiveNav} />
+      <main className="flex-1 p-6 overflow-y-auto">
+        <div className="max-w-7xl mx-auto">
+          <DashboardHeader lastRefresh={data.lastRefresh} onRefresh={loadData} />
+          <motion.div key={activeNav} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
+            {renderContent()}
+          </motion.div>
         </div>
-
-        {/* Task Board */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-white flex items-center space-x-2">
-              <span>📋</span>
-              <span>Project Tasks</span>
-            </h2>
-            <div className="text-gray-400 text-sm">
-              {tasks.length} tasks across {Array.from(new Set(tasks.map(t => t.project))).length} projects
-            </div>
-          </div>
-          
-          <KanbanBoard tasks={tasks} />
-        </div>
-
-        {/* Future API Integration Note */}
-        <div className="mt-8 p-4 bg-gray-800/30 border border-gray-700/50 rounded-lg">
-          <div className="flex items-start space-x-3">
-            <span className="text-yellow-400">⚠️</span>
-            <div>
-              <h3 className="text-yellow-400 font-medium mb-1">Development Note</h3>
-              <p className="text-gray-400 text-sm">
-                This dashboard currently uses hardcoded data. Next phase will integrate with OpenClaw's live APIs:
-              </p>
-              <ul className="text-gray-500 text-xs mt-2 space-y-1">
-                <li>• <code className="bg-gray-700 px-1 rounded">GET /api/sessions</code> for real agent status</li>
-                <li>• <code className="bg-gray-700 px-1 rounded">GET /api/cron/jobs</code> for scheduled tasks</li>
-                <li>• <code className="bg-gray-700 px-1 rounded">GET /api/tasks</code> for live project data</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+      </main>
+      <SessionModal agent={selectedAgent} onClose={() => setSelectedAgent(null)} />
     </div>
   );
 }
