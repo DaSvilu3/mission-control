@@ -1,9 +1,31 @@
 {
-  "timestamp": "2026-02-19T12:51:18Z",
+  "timestamp": "2026-02-19T12:54:15Z",
   "gateway": {
     "healthy": true
   },
   "sessions": [
+    {
+      "key": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22",
+      "kind": "direct",
+      "label": null,
+      "displayName": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22",
+      "model": "claude-opus-4-6",
+      "channel": null,
+      "totalTokens": 0,
+      "updatedAt": 1771505642057,
+      "lastMessage": null
+    },
+    {
+      "key": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22:run:0bbc564b-5d7a-4ed3-93ed-0bd7198f15b0",
+      "kind": "direct",
+      "label": null,
+      "displayName": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22:run:0bbc564b-5d7a-4ed3-93ed-0bd7198f15b0",
+      "model": "claude-opus-4-6",
+      "channel": null,
+      "totalTokens": 0,
+      "updatedAt": 1771505642057,
+      "lastMessage": null
+    },
     {
       "key": "agent:main:main",
       "kind": "direct",
@@ -11,8 +33,8 @@
       "displayName": "agent:main:main",
       "model": "claude-opus-4-6",
       "channel": null,
-      "totalTokens": 90337,
-      "updatedAt": 1771505306516,
+      "totalTokens": 47861,
+      "updatedAt": 1771505633512,
       "lastMessage": null
     },
     {
@@ -22,8 +44,8 @@
       "displayName": "agent:main:subagent:a14efd99-f94e-4fb7-92ed-a7fa73909357",
       "model": "claude-opus-4-6",
       "channel": null,
-      "totalTokens": 0,
-      "updatedAt": 1771505256724,
+      "totalTokens": 43890,
+      "updatedAt": 1771505581093,
       "lastMessage": null
     },
     {
@@ -38,17 +60,6 @@
       "lastMessage": null
     },
     {
-      "key": "agent:main:subagent:ed666ef4-81d0-4f2d-901c-bbde853d1560",
-      "kind": "direct",
-      "label": null,
-      "displayName": "agent:main:subagent:ed666ef4-81d0-4f2d-901c-bbde853d1560",
-      "model": "claude-sonnet-4-20250514",
-      "channel": null,
-      "totalTokens": 200000,
-      "updatedAt": 1771502493672,
-      "lastMessage": null
-    },
-    {
       "key": "agent:main:discord:channel:1470999283515003075",
       "kind": "group",
       "label": null,
@@ -60,11 +71,25 @@
       "lastMessage": null
     }
   ],
-  "cronJobs": [],
+  "cronJobs": [
+    {
+      "id": "c3368d06-7b50-4d28-a91d-aea83351fa22",
+      "name": "mission-control-status-push",
+      "enabled": true,
+      "schedule": {
+        "kind": "every",
+        "everyMs": 60000,
+        "anchorMs": 1771505581873
+      },
+      "lastRun": null,
+      "nextRun": null,
+      "payload": "agentTurn"
+    }
+  ],
   "meta": {
-    "totalSessions": 5,
-    "activeSessions": 2,
-    "totalCronJobs": 0,
-    "enabledCronJobs": 0
+    "totalSessions": 6,
+    "activeSessions": 4,
+    "totalCronJobs": 1,
+    "enabledCronJobs": 1
   }
 }
