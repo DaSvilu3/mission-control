@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-19T13:31:10Z",
+  "timestamp": "2026-02-19T13:32:13Z",
   "gateway": {
     "healthy": true
   },
@@ -12,18 +12,18 @@
       "model": "claude-opus-4-6",
       "channel": null,
       "totalTokens": 0,
-      "updatedAt": 1771507861893,
+      "updatedAt": 1771507921887,
       "lastMessage": null
     },
     {
-      "key": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22:run:e5361da4-0128-481f-9253-d687ed9ecd32",
+      "key": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22:run:8978b151-c85a-40e7-b808-4c9e4e471be5",
       "kind": "direct",
       "label": null,
-      "displayName": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22:run:e5361da4-0128-481f-9253-d687ed9ecd32",
+      "displayName": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22:run:8978b151-c85a-40e7-b808-4c9e4e471be5",
       "model": "claude-opus-4-6",
       "channel": null,
       "totalTokens": 0,
-      "updatedAt": 1771507861893,
+      "updatedAt": 1771507921887,
       "lastMessage": null
     },
     {
@@ -34,7 +34,18 @@
       "model": "claude-opus-4-6",
       "channel": null,
       "totalTokens": 200000,
-      "updatedAt": 1771507852981,
+      "updatedAt": 1771507920344,
+      "lastMessage": null
+    },
+    {
+      "key": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22:run:e5361da4-0128-481f-9253-d687ed9ecd32",
+      "kind": "direct",
+      "label": null,
+      "displayName": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22:run:e5361da4-0128-481f-9253-d687ed9ecd32",
+      "model": "claude-opus-4-6",
+      "channel": null,
+      "totalTokens": 32744,
+      "updatedAt": 1771507861893,
       "lastMessage": null
     },
     {
@@ -494,7 +505,7 @@
     }
   ],
   "meta": {
-    "totalSessions": 43,
+    "totalSessions": 44,
     "activeSessions": 7,
     "totalCronJobs": 1,
     "enabledCronJobs": 1
