@@ -36,7 +36,7 @@ const fallbackTimeline: TimelineEvent[] = [
 
 const fallbackProjects: Project[] = [
   { id: 'sijil-erp', name: 'Sijil ERP', totalTasks: 27, completedTasks: 27, status: 'completed', color: '#10b981' },
-  { id: 'mission-control', name: 'Mission Control', totalTasks: 8, completedTasks: 3, status: 'in_progress', color: '#8b5cf6' },
+  { id: 'mission-control', name: 'Mission Control', totalTasks: 8, completedTasks: 8, status: 'completed', color: '#8b5cf6' },
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
