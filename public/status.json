@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-19T13:19:11Z",
+  "timestamp": "2026-02-19T13:20:13Z",
   "gateway": {
     "healthy": true
   },
@@ -12,7 +12,18 @@
       "model": "claude-opus-4-6",
       "channel": null,
       "totalTokens": 0,
-      "updatedAt": 1771507141889,
+      "updatedAt": 1771507201893,
+      "lastMessage": null
+    },
+    {
+      "key": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22:run:129b3eaa-e3b4-41d9-8b1c-989370b8d0ca",
+      "kind": "direct",
+      "label": null,
+      "displayName": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22:run:129b3eaa-e3b4-41d9-8b1c-989370b8d0ca",
+      "model": "claude-opus-4-6",
+      "channel": null,
+      "totalTokens": 0,
+      "updatedAt": 1771507201893,
       "lastMessage": null
     },
     {
@@ -22,7 +33,7 @@
       "displayName": "agent:main:cron:c3368d06-7b50-4d28-a91d-aea83351fa22:run:ef4fe4d6-a4de-447b-8874-493624aebd53",
       "model": "claude-opus-4-6",
       "channel": null,
-      "totalTokens": 0,
+      "totalTokens": 32744,
       "updatedAt": 1771507141889,
       "lastMessage": null
     },
@@ -362,7 +373,7 @@
     }
   ],
   "meta": {
-    "totalSessions": 31,
+    "totalSessions": 32,
     "activeSessions": 6,
     "totalCronJobs": 1,
     "enabledCronJobs": 1
