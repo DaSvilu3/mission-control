@@ -8,6 +8,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
   const statusColor = agent.status === 'active' ? 'bg-green-500' : 'bg-yellow-500';
   
   const roleColors: Record<string, string> = {
+    MAIN: 'bg-purple-600',
     COORDINATOR: 'bg-purple-600',
     BUILDER: 'bg-blue-500', 
     RESEARCHER: 'bg-indigo-500',
@@ -16,6 +17,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
   };
 
   const roleIcons: Record<string, string> = {
+    MAIN: '🎯',
     COORDINATOR: '🎯',
     BUILDER: '🔨',
     RESEARCHER: '🔍', 
