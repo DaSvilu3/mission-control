@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-02-19T12:50:56Z",
+  "gateway": {
+    "healthy": true
+  },
+  "sessions": [],
+  "cronJobs": [],
+  "meta": {
+    "totalSessions": 0,
+    "activeSessions": 0,
+    "totalCronJobs": 0,
+    "enabledCronJobs": 0
+  }
+}
